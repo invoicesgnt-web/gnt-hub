@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1a237e">
+<title>GNT Hub</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: #1a237e;
+  }
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  .offline {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #1a237e;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    text-align: center;
+    padding: 40px;
+  }
+  .offline.visivel { display: flex; }
+  .offline .icon { font-size: 48px; margin-bottom: 16px; }
+  .offline h2 { font-size: 20px; margin-bottom: 8px; }
+  .offline p { font-size: 14px; opacity: 0.7; }
+  .offline button {
+    margin-top: 20px; padding: 12px 32px;
+    background: white; color: #1a237e;
+    border: none; border-radius: 8px;
+    font-size: 16px; font-weight: 700;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<!-- ALTERAR O URL ABAIXO PARA O TEU HUB -->
+<iframe id="app" src="https://script.google.com/macros/s/COLOCA_AQUI_O_TEU_URL_DO_HUB/exec" allow="autoplay"></iframe>
+
+<div class="offline" id="offline">
+  <div class="icon">📡</div>
+  <h2>Sem ligação à internet</h2>
+  <p>Verifica a tua ligação e tenta novamente.</p>
+  <button onclick="location.reload()">Tentar novamente</button>
+</div>
+
+<script>
+  // Registar Service Worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
+
+  // Detetar offline
+  window.addEventListener('offline', function() {
+    document.getElementById('offline').classList.add('visivel');
+  });
+  window.addEventListener('online', function() {
+    document.getElementById('offline').classList.remove('visivel');
+    document.getElementById('app').src = document.getElementById('app').src;
+  });
+</script>
+</body>
+</html>
